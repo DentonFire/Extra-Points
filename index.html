@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Denton Fire - Civil Service Points</title>
+    
+    <link rel="icon" type="image/png" href="https://files.constantcontact.com/3720c3fd901/10017eb4-f7d2-424d-92ed-c1b5424b9869.png">
+    
+    <!-- Fonts and Tailwind -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#152a40',
+                        red: '#bf2726',
+                        yellow: '#f9c031',
+                        gray: { 50: '#f9fafb', 100: '#f3f4f6', 200: '#e5e7eb', 800: '#1f2937' }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .hero-bg {
+            background-color: #152a40;
+            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+        }
+        /* Custom Checkbox Style */
+        input[type="checkbox"]:checked + div {
+            border-color: #152a40;
+            background-color: #f0fdf4; /* Light green tint */
+        }
+        input[type="checkbox"]:checked + div .check-icon {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
+
+    <!-- Hero Section -->
+    <div class="hero-bg text-white py-12 px-4 text-center shadow-lg">
+        <img src="https://files.constantcontact.com/3720c3fd901/10017eb4-f7d2-424d-92ed-c1b5424b9869.png" alt="Denton Fire Patch" class="h-24 mx-auto mb-4 drop-shadow-lg">
+        <h1 class="text-3xl md:text-4xl font-black uppercase tracking-wide mb-2">Civil Service Exam</h1>
+        <p class="text-yellow text-lg font-bold tracking-widest">EXTRA POINTS SUBMISSION</p>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-3xl mx-auto w-full px-4 py-8 space-y-6">
+
+        <!-- Instructions Card -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h2 class="text-navy font-bold text-xl mb-4 border-b pb-2">Instructions</h2>
+            <p class="text-sm text-gray-600 mb-4">
+                Candidates may earn extra points on their Civil Service Exam by submitting proof of eligibility. 
+                Select the categories below that apply to you. 
+            </p>
+            <div class="bg-blue-50 border-l-4 border-navy p-4 text-sm text-navy">
+                <strong>Note:</strong> Clicking "Generate Email" below will open your email app. 
+                You must <span class="underline font-bold">manually attach</span> your documents (DD-214, Residency Proof, etc.) to that email before sending.
+            </div>
+        </div>
+
+        <!-- Submission Form -->
+        <form id="pointsForm" class="bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">
+            
+            <!-- Personal Info -->
+            <div class="p-6 bg-gray-50 border-b border-gray-200">
+                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Candidate Full Name</label>
+                <input type="text" id="candidateName" class="w-full border-2 border-gray-300 rounded p-3 text-lg focus:border-navy focus:outline-none" placeholder="First Last">
+            </div>
+
+            <!-- Checkboxes -->
+            <div class="p-6 space-y-4">
+                
+                <!-- Military -->
+                <label class="block cursor-pointer group">
+                    <input type="checkbox" id="checkMilitary" class="hidden" onchange="updateTotal()">
+                    <div class="border-2 border-gray-200 rounded-lg p-4 flex items-center justify-between group-hover:border-navy transition duration-200">
+                        <div class="flex items-center gap-4">
+                            <div class="h-6 w-6 rounded border-2 border-gray-300 flex items-center justify-center bg-white check-container">
+                                <span class="check-icon opacity-0 text-navy font-bold">✓</span>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-navy text-lg">Military Service</h3>
+                                <p class="text-xs text-gray-500">Must attach DD-214 showing at least 180 days of active duty service and an honorable discharge</p>
+                            </div>
+                        </div>
+                        <div class="text-xl font-black text-navy bg-gray-100 px-3 py-1 rounded">+5</div>
+                    </div>
+                </label>
+
+                <!-- Resident -->
+                <label class="block cursor-pointer group">
+                    <input type="checkbox" id="checkResident" class="hidden" onchange="updateTotal()">
+                    <div class="border-2 border-gray-200 rounded-lg p-4 flex items-center justify-between group-hover:border-navy transition duration-200">
+                        <div class="flex items-center gap-4">
+                            <div class="h-6 w-6 rounded border-2 border-gray-300 flex items-center justify-center bg-white check-container">
+                                <span class="check-icon opacity-0 text-navy font-bold">✓</span>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-navy text-lg">Denton Resident</h3>
+                                <p class="text-xs text-gray-500">Must attach proof of residency</p>
+                            </div>
+                        </div>
+                        <div class="text-xl font-black text-navy bg-gray-100 px-3 py-1 rounded">+1</div>
+                    </div>
+                </label>
+
+                <!-- LaGrone -->
+                <label class="block cursor-pointer group">
+                    <input type="checkbox" id="checkLaGrone" class="hidden" onchange="updateTotal()">
+                    <div class="border-2 border-gray-200 rounded-lg p-4 flex items-center justify-between group-hover:border-navy transition duration-200">
+                        <div class="flex items-center gap-4">
+                            <div class="h-6 w-6 rounded border-2 border-gray-300 flex items-center justify-center bg-white check-container">
+                                <span class="check-icon opacity-0 text-navy font-bold">✓</span>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-navy text-lg">LaGrone Fire/EMT Grad</h3>
+                                <p class="text-xs text-gray-500">Must attach completion certificate</p>
+                            </div>
+                        </div>
+                        <div class="text-xl font-black text-navy bg-gray-100 px-3 py-1 rounded">+1</div>
+                    </div>
+                </label>
+
+            </div>
+
+            <!-- Footer / Total -->
+            <div class="bg-navy p-6 text-white flex flex-col md:flex-row items-center justify-between gap-4">
+                <div>
+                    <span class="block text-xs text-gray-400 uppercase tracking-widest mb-1">Total Extra Points</span>
+                    <span id="totalPoints" class="text-4xl font-black text-yellow">0</span>
+                </div>
+                
+                <button type="button" onclick="generateEmail()" class="w-full md:w-auto bg-red hover:bg-red-700 text-white font-bold py-3 px-8 rounded shadow-lg transition transform active:scale-95 text-center flex items-center justify-center gap-2">
+                    <span>📧</span> Generate Email
+                </button>
+            </div>
+        </form>
+
+    </main>
+
+    <!-- Simple Footer -->
+    <footer class="bg-gray-200 text-center py-6 mt-auto">
+        <p class="text-xs text-gray-500">Denton Fire Department • Civil Service Recruitment</p>
+    </footer>
+
+    <script>
+        function updateTotal() {
+            let total = 0;
+            if (document.getElementById('checkMilitary').checked) total += 5;
+            if (document.getElementById('checkResident').checked) total += 1;
+            if (document.getElementById('checkLaGrone').checked) total += 1;
+            
+            document.getElementById('totalPoints').innerText = total;
+        }
+
+        function generateEmail() {
+            const name = document.getElementById('candidateName').value;
+            if (!name) {
+                alert("Please enter your name.");
+                return;
+            }
+
+            const military = document.getElementById('checkMilitary').checked;
+            const resident = document.getElementById('checkResident').checked;
+            const lagrone = document.getElementById('checkLaGrone').checked;
+            
+            if (!military && !resident && !lagrone) {
+                alert("Please select at least one category.");
+                return;
+            }
+
+            let claims = [];
+            if (military) claims.push("- Military Service (5 pts) [Attached DD-214]");
+            if (resident) claims.push("- Denton Resident (1 pt) [Attached Proof]");
+            if (lagrone) claims.push("- LaGrone Fire/EMT Grad (1 pt) [Attached Cert]");
+
+            const total = document.getElementById('totalPoints').innerText;
+
+            const subject = `Civil Service Extra Points - ${name}`;
+            const body = `RECRUITER,\n\nI am submitting documentation for extra points on the Civil Service Exam.\n\nCANDIDATE: ${name}\nTOTAL POINTS CLAIMED: ${total}\n\nCATEGORIES:\n${claims.join('\n')}\n\n***\nI have attached the required verification documents to this email.\n***`;
+
+            window.location.href = `mailto:FireRecruiter@cityofdenton.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        }
+    </script>
+</body>
+</html>
