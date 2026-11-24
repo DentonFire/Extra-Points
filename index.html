@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Denton Fire - Civil Service Points</title>
-    
+
     <link rel="icon" type="image/png" href="https://files.constantcontact.com/3720c3fd901/10017eb4-f7d2-424d-92ed-c1b5424b9869.png">
-    
+
     <!-- Fonts and Tailwind -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,14 +35,25 @@
             background-color: #152a40;
             background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
         }
-        /* Custom Checkbox Style */
+        /* Checkboxes stay in the page for keyboards and screen readers, but are visually replaced by the cards */
+        .sr-only-input {
+            position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+            overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+        }
         input[type="checkbox"]:checked + div {
             border-color: #152a40;
-            background-color: #f0fdf4; /* Light green tint */
+            background-color: #f0fdf4;
         }
-        input[type="checkbox"]:checked + div .check-icon {
-            opacity: 1;
+        input[type="checkbox"]:checked + div .check-icon { opacity: 1; }
+        input[type="checkbox"]:focus-visible + div {
+            outline: 3px solid #f9c031;
+            outline-offset: 2px;
         }
+        .copy-btn:focus-visible, .action-btn:focus-visible, input[type="text"]:focus-visible, input[type="email"]:focus-visible {
+            outline: 3px solid #f9c031;
+            outline-offset: 2px;
+        }
+        pre.email-body { white-space: pre-wrap; word-break: break-word; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
@@ -60,35 +71,46 @@
         <!-- Instructions Card -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <h2 class="text-navy font-bold text-xl mb-4 border-b pb-2">Instructions</h2>
-            <p class="text-sm text-gray-600 mb-4">
-                Candidates may earn extra points on their Civil Service Exam by submitting proof of eligibility. 
-                Select the categories below that apply to you. 
+            <p class="text-sm text-gray-600 mb-3">
+                Candidates may earn extra points on their Civil Service Exam by submitting proof of eligibility.
+                Select the categories below that apply to you, then send the email with your documents attached.
+            </p>
+            <p class="text-sm text-navy font-bold mb-4">
+                Submit your documents before the date of the exam. Points are added only to a passing score.
             </p>
             <div class="bg-blue-50 border-l-4 border-navy p-4 text-sm text-navy">
-                <strong>Note:</strong> Clicking "Generate Email" below will open your email app. 
-                You must <span class="underline font-bold">manually attach</span> your documents (DD-214, Residency Proof, etc.) to that email before sending.
+                <strong>Note:</strong> You must <span class="underline font-bold">attach your documents</span> (DD-214, proof of residency, LaGrone certificate) to the email before you send it.
+                If your email app does not open, use the Gmail or Outlook buttons, or copy the email and paste it into any email account.
             </div>
         </div>
 
         <!-- Submission Form -->
-        <form id="pointsForm" class="bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">
-            
+        <form id="pointsForm" class="bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden" novalidate>
+
             <!-- Personal Info -->
-            <div class="p-6 bg-gray-50 border-b border-gray-200">
-                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Candidate Full Name</label>
-                <input type="text" id="candidateName" class="w-full border-2 border-gray-300 rounded p-3 text-lg focus:border-navy focus:outline-none" placeholder="First Last">
+            <div class="p-6 bg-gray-50 border-b border-gray-200 space-y-4">
+                <div>
+                    <label for="candidateName" class="block text-xs font-bold text-gray-500 uppercase mb-1">Candidate Full Name</label>
+                    <input type="text" id="candidateName" autocomplete="name" class="w-full border-2 border-gray-300 rounded p-3 text-lg focus:border-navy focus:outline-none" placeholder="First Last">
+                </div>
+                <div>
+                    <label for="candidateEmail" class="block text-xs font-bold text-gray-500 uppercase mb-1">Email You Used to Register for the Exam</label>
+                    <input type="email" id="candidateEmail" autocomplete="email" class="w-full border-2 border-gray-300 rounded p-3 text-lg focus:border-navy focus:outline-none" placeholder="name@example.com">
+                    <p class="text-xs text-gray-500 mt-1">We use this to match your points to your exam registration.</p>
+                </div>
             </div>
 
             <!-- Checkboxes -->
-            <div class="p-6 space-y-4">
-                
+            <fieldset class="p-6 space-y-4">
+                <legend class="sr-only-input">Extra point categories</legend>
+
                 <!-- Military -->
                 <label class="block cursor-pointer group">
-                    <input type="checkbox" id="checkMilitary" class="hidden" onchange="updateTotal()">
-                    <div class="border-2 border-gray-200 rounded-lg p-4 flex items-center justify-between group-hover:border-navy transition duration-200">
+                    <input type="checkbox" id="checkMilitary" class="sr-only-input" onchange="updateTotal()">
+                    <div class="border-2 border-gray-200 rounded-lg p-4 flex items-center justify-between gap-3 group-hover:border-navy transition duration-200">
                         <div class="flex items-center gap-4">
-                            <div class="h-6 w-6 rounded border-2 border-gray-300 flex items-center justify-center bg-white check-container">
-                                <span class="check-icon opacity-0 text-navy font-bold">✓</span>
+                            <div class="h-6 w-6 flex-none rounded border-2 border-gray-300 flex items-center justify-center bg-white">
+                                <span class="check-icon opacity-0 text-navy font-bold" aria-hidden="true">&#10003;</span>
                             </div>
                             <div>
                                 <h3 class="font-bold text-navy text-lg">Military Service</h3>
@@ -101,11 +123,11 @@
 
                 <!-- Resident -->
                 <label class="block cursor-pointer group">
-                    <input type="checkbox" id="checkResident" class="hidden" onchange="updateTotal()">
-                    <div class="border-2 border-gray-200 rounded-lg p-4 flex items-center justify-between group-hover:border-navy transition duration-200">
+                    <input type="checkbox" id="checkResident" class="sr-only-input" onchange="updateTotal()">
+                    <div class="border-2 border-gray-200 rounded-lg p-4 flex items-center justify-between gap-3 group-hover:border-navy transition duration-200">
                         <div class="flex items-center gap-4">
-                            <div class="h-6 w-6 rounded border-2 border-gray-300 flex items-center justify-center bg-white check-container">
-                                <span class="check-icon opacity-0 text-navy font-bold">✓</span>
+                            <div class="h-6 w-6 flex-none rounded border-2 border-gray-300 flex items-center justify-center bg-white">
+                                <span class="check-icon opacity-0 text-navy font-bold" aria-hidden="true">&#10003;</span>
                             </div>
                             <div>
                                 <h3 class="font-bold text-navy text-lg">Denton Resident</h3>
@@ -118,11 +140,11 @@
 
                 <!-- LaGrone -->
                 <label class="block cursor-pointer group">
-                    <input type="checkbox" id="checkLaGrone" class="hidden" onchange="updateTotal()">
-                    <div class="border-2 border-gray-200 rounded-lg p-4 flex items-center justify-between group-hover:border-navy transition duration-200">
+                    <input type="checkbox" id="checkLaGrone" class="sr-only-input" onchange="updateTotal()">
+                    <div class="border-2 border-gray-200 rounded-lg p-4 flex items-center justify-between gap-3 group-hover:border-navy transition duration-200">
                         <div class="flex items-center gap-4">
-                            <div class="h-6 w-6 rounded border-2 border-gray-300 flex items-center justify-center bg-white check-container">
-                                <span class="check-icon opacity-0 text-navy font-bold">✓</span>
+                            <div class="h-6 w-6 flex-none rounded border-2 border-gray-300 flex items-center justify-center bg-white">
+                                <span class="check-icon opacity-0 text-navy font-bold" aria-hidden="true">&#10003;</span>
                             </div>
                             <div>
                                 <h3 class="font-bold text-navy text-lg">LaGrone Fire/EMT Grad</h3>
@@ -133,66 +155,156 @@
                     </div>
                 </label>
 
-            </div>
+            </fieldset>
+
+            <!-- Inline error (replaces pop-up alerts) -->
+            <div id="formError" role="alert" class="hidden mx-6 mb-4 border-l-4 border-red bg-red-50 p-3 text-sm font-bold text-red"></div>
 
             <!-- Footer / Total -->
             <div class="bg-navy p-6 text-white flex flex-col md:flex-row items-center justify-between gap-4">
                 <div>
                     <span class="block text-xs text-gray-400 uppercase tracking-widest mb-1">Total Extra Points</span>
-                    <span id="totalPoints" class="text-4xl font-black text-yellow">0</span>
+                    <span id="totalPoints" class="text-4xl font-black text-yellow" aria-live="polite">0</span>
                 </div>
-                
-                <button type="button" onclick="generateEmail()" class="w-full md:w-auto bg-red hover:bg-red-700 text-white font-bold py-3 px-8 rounded shadow-lg transition transform active:scale-95 text-center flex items-center justify-center gap-2">
-                    <span>📧</span> Generate Email
+
+                <button type="button" onclick="generateEmail()" class="action-btn w-full md:w-auto bg-red hover:opacity-90 text-white font-bold py-3 px-8 rounded shadow-lg transition transform active:scale-95 text-center flex items-center justify-center gap-2">
+                    <span aria-hidden="true">&#128231;</span> Build My Email
                 </button>
             </div>
         </form>
+
+        <!-- Send options (shown after Build My Email) -->
+        <section id="sendPanel" class="hidden bg-white rounded-lg shadow-lg border-2 border-navy overflow-hidden" aria-labelledby="sendHeading" tabindex="-1">
+            <div class="p-6 border-b border-gray-200">
+                <h2 id="sendHeading" class="text-navy font-bold text-xl mb-1">Step 2: Send it with your documents attached</h2>
+                <p class="text-sm text-gray-600">Pick whichever option works for you. Every option sends the same email to the recruiter.</p>
+            </div>
+
+            <div class="p-6 space-y-3">
+                <a id="mailtoLink" href="#" class="action-btn block w-full bg-navy text-white font-bold text-center py-3 px-4 rounded hover:opacity-90">Open my email app</a>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <a id="gmailLink" href="#" target="_blank" rel="noopener" class="action-btn block bg-white border-2 border-navy text-navy font-bold text-center py-3 px-4 rounded hover:bg-gray-100">Open in Gmail</a>
+                    <a id="outlookLink" href="#" target="_blank" rel="noopener" class="action-btn block bg-white border-2 border-navy text-navy font-bold text-center py-3 px-4 rounded hover:bg-gray-100">Open in Outlook.com</a>
+                </div>
+                <p class="text-xs text-gray-500">Nothing opened? Use any email account and copy each piece below.</p>
+            </div>
+
+            <div class="p-6 bg-gray-50 border-t border-gray-200 space-y-4">
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-bold text-gray-500 uppercase">To</span>
+                        <button type="button" class="copy-btn text-xs font-bold text-navy underline" data-copy="emailTo">Copy</button>
+                    </div>
+                    <div id="emailTo" class="bg-white border border-gray-200 rounded p-3 font-mono text-sm break-all">FireRecruiter@cityofdenton.com</div>
+                </div>
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-bold text-gray-500 uppercase">Subject</span>
+                        <button type="button" class="copy-btn text-xs font-bold text-navy underline" data-copy="emailSubject">Copy</button>
+                    </div>
+                    <div id="emailSubject" class="bg-white border border-gray-200 rounded p-3 font-mono text-sm break-all"></div>
+                </div>
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-bold text-gray-500 uppercase">Message</span>
+                        <button type="button" class="copy-btn text-xs font-bold text-navy underline" data-copy="emailBody">Copy</button>
+                    </div>
+                    <pre id="emailBody" class="email-body bg-white border border-gray-200 rounded p-3 font-mono text-sm"></pre>
+                </div>
+                <p id="copyStatus" class="text-xs font-bold text-navy" aria-live="polite"></p>
+                <div class="bg-yellow/20 border-l-4 border-yellow p-3 text-sm text-navy">
+                    <strong>Before you hit send:</strong> attach your documents. Emails without documents cannot be credited.
+                </div>
+            </div>
+        </section>
 
     </main>
 
     <!-- Simple Footer -->
     <footer class="bg-gray-200 text-center py-6 mt-auto">
-        <p class="text-xs text-gray-500">Denton Fire Department • Civil Service Recruitment</p>
+        <p class="text-xs text-gray-500">Denton Fire Department &bull; Civil Service Recruitment &bull; FireRecruiter@cityofdenton.com</p>
     </footer>
 
     <script>
+        const RECRUITER = 'FireRecruiter@cityofdenton.com';
+
         function updateTotal() {
             let total = 0;
             if (document.getElementById('checkMilitary').checked) total += 5;
             if (document.getElementById('checkResident').checked) total += 1;
             if (document.getElementById('checkLaGrone').checked) total += 1;
-            
             document.getElementById('totalPoints').innerText = total;
+            hideError();
+        }
+
+        function showError(msg) {
+            const el = document.getElementById('formError');
+            el.textContent = msg;
+            el.classList.remove('hidden');
+        }
+
+        function hideError() {
+            document.getElementById('formError').classList.add('hidden');
         }
 
         function generateEmail() {
-            const name = document.getElementById('candidateName').value;
-            if (!name) {
-                alert("Please enter your name.");
-                return;
-            }
-
+            const name = document.getElementById('candidateName').value.trim();
+            const email = document.getElementById('candidateEmail').value.trim();
             const military = document.getElementById('checkMilitary').checked;
             const resident = document.getElementById('checkResident').checked;
             const lagrone = document.getElementById('checkLaGrone').checked;
-            
-            if (!military && !resident && !lagrone) {
-                alert("Please select at least one category.");
-                return;
-            }
 
-            let claims = [];
-            if (military) claims.push("- Military Service (5 pts) [Attached DD-214]");
-            if (resident) claims.push("- Denton Resident (1 pt) [Attached Proof]");
-            if (lagrone) claims.push("- LaGrone Fire/EMT Grad (1 pt) [Attached Cert]");
+            if (!name) { showError('Please enter your full name.'); document.getElementById('candidateName').focus(); return; }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('Please enter the email address you used to register for the exam.'); document.getElementById('candidateEmail').focus(); return; }
+            if (!military && !resident && !lagrone) { showError('Please select at least one category.'); return; }
+            hideError();
+
+            const claims = [];
+            if (military) claims.push('- Military Service (5 pts) [Attached DD-214]');
+            if (resident) claims.push('- Denton Resident (1 pt) [Attached Proof]');
+            if (lagrone) claims.push('- LaGrone Fire/EMT Grad (1 pt) [Attached Cert]');
 
             const total = document.getElementById('totalPoints').innerText;
-
             const subject = `Civil Service Extra Points - ${name}`;
-            const body = `RECRUITER,\n\nI am submitting documentation for extra points on the Civil Service Exam.\n\nCANDIDATE: ${name}\nTOTAL POINTS CLAIMED: ${total}\n\nCATEGORIES:\n${claims.join('\n')}\n\n***\nI have attached the required verification documents to this email.\n***`;
+            const body = `RECRUITER,\n\nI am submitting documentation for extra points on the Civil Service Exam.\n\nCANDIDATE: ${name}\nREGISTRATION EMAIL: ${email}\nTOTAL POINTS CLAIMED: ${total}\n\nCATEGORIES:\n${claims.join('\n')}\n\n***\nI have attached the required verification documents to this email.\n***`;
 
-            window.location.href = `mailto:FireRecruiter@cityofdenton.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            const s = encodeURIComponent(subject), b = encodeURIComponent(body), t = encodeURIComponent(RECRUITER);
+            document.getElementById('mailtoLink').href = `mailto:${RECRUITER}?subject=${s}&body=${b}`;
+            document.getElementById('gmailLink').href = `https://mail.google.com/mail/?view=cm&fs=1&to=${t}&su=${s}&body=${b}`;
+            document.getElementById('outlookLink').href = `https://outlook.live.com/mail/0/deeplink/compose?to=${t}&subject=${s}&body=${b}`;
+            document.getElementById('emailSubject').textContent = subject;
+            document.getElementById('emailBody').textContent = body;
+            document.getElementById('copyStatus').textContent = '';
+
+            const panel = document.getElementById('sendPanel');
+            panel.classList.remove('hidden');
+            panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            panel.focus({ preventScroll: true });
         }
+
+        async function copyText(id) {
+            const text = document.getElementById(id).textContent;
+            const status = document.getElementById('copyStatus');
+            try {
+                await navigator.clipboard.writeText(text);
+                status.textContent = 'Copied. Paste it into your email.';
+            } catch (e) {
+                // Older browsers: select the text so the candidate can copy it by hand
+                const range = document.createRange();
+                range.selectNodeContents(document.getElementById(id));
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+                status.textContent = 'Text selected. Press Ctrl+C (or Cmd+C) to copy.';
+            }
+        }
+
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', () => copyText(btn.dataset.copy));
+        });
+        ['candidateName', 'candidateEmail'].forEach(id => {
+            document.getElementById(id).addEventListener('input', hideError);
+        });
     </script>
 </body>
 </html>
