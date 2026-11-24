@@ -79,7 +79,7 @@
                 Submit your documents before the date of the exam. Points are added only to a passing score.
             </p>
             <div class="bg-blue-50 border-l-4 border-navy p-4 text-sm text-navy">
-                <strong>Note:</strong> You must <span class="underline font-bold">attach your documents</span> (DD-214, proof of residency, LaGrone certificate) to the email before you send it.
+                <strong>Note:</strong> You must <span class="underline font-bold">attach your documents</span> (DD-214, proof of residency, Denton ISD Fire/EMT program certificate and certification) to the email before you send it.
                 If your email app does not open, use the Gmail or Outlook buttons, or copy the email and paste it into any email account.
             </div>
         </div>
@@ -147,8 +147,8 @@
                                 <span class="check-icon opacity-0 text-navy font-bold" aria-hidden="true">&#10003;</span>
                             </div>
                             <div>
-                                <h3 class="font-bold text-navy text-lg">LaGrone Fire/EMT Grad</h3>
-                                <p class="text-xs text-gray-500">Must attach completion certificate</p>
+                                <h3 class="font-bold text-navy text-lg">Denton ISD Fire or EMT Program</h3>
+                                <p class="text-xs text-gray-500">High school program at LaGrone. Must attach the completion certificate and your TCFP or Texas DSHS certification</p>
                             </div>
                         </div>
                         <div class="text-xl font-black text-navy bg-gray-100 px-3 py-1 rounded">+1</div>
@@ -262,7 +262,7 @@
             const claims = [];
             if (military) claims.push('- Military Service (5 pts) [Attached DD-214]');
             if (resident) claims.push('- Denton Resident (1 pt) [Attached Proof]');
-            if (lagrone) claims.push('- LaGrone Fire/EMT Grad (1 pt) [Attached Cert]');
+            if (lagrone) claims.push('- Denton ISD High School Fire or EMT Program, LaGrone (1 pt) [Attached certificate and TCFP/DSHS certification]');
 
             const total = document.getElementById('totalPoints').innerText;
             const subject = `Civil Service Extra Points - ${name}`;
